@@ -17,9 +17,7 @@
       --shadow-glow: 0 0 18px rgba(58, 242, 163, 0.35);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -101,10 +99,7 @@
       letter-spacing: 0.12em;
     }
 
-    #aboutPanel p {
-      margin: 4px 0;
-      line-height: 1.4;
-    }
+    #aboutPanel p { margin: 4px 0; line-height: 1.4; }
 
     #modeChips {
       margin-top: 6px;
@@ -130,10 +125,7 @@
       align-items: flex-start;
     }
 
-    #canvasWrapper {
-      position: relative;
-      flex: 0 1 420px;
-    }
+    #canvasWrapper { position: relative; flex: 0 1 420px; }
 
     canvas {
       background: radial-gradient(circle at top, #131834 0, #050813 55%, #02030a 100%);
@@ -181,17 +173,9 @@
       margin: 3px 0;
     }
 
-    .statLabel {
-      color: var(--text-muted);
-    }
-
-    .statValue {
-      font-weight: 600;
-    }
-
-    #modeLabel {
-      color: var(--accent-soft);
-    }
+    .statLabel { color: var(--text-muted); }
+    .statValue { font-weight: 600; }
+    #modeLabel { color: var(--accent-soft); }
 
     .btn-row {
       margin: 8px 0 4px;
@@ -218,15 +202,8 @@
       box-shadow: 0 0 10px rgba(58, 242, 163, 0.5);
     }
 
-    button:hover {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: translateY(0);
-      box-shadow: none;
-    }
+    button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    button:active { transform: translateY(0); box-shadow: none; }
 
     label {
       font-size: 0.84rem;
@@ -269,9 +246,8 @@
       font-size: 0.8rem;
       margin-top: 3px;
     }
-
     #message.good { color: var(--accent); }
-    #message.bad { color: var(--danger); }
+    #message.bad  { color: var(--danger); }
 
     #footer {
       margin-top: 8px;
@@ -285,6 +261,34 @@
       background: #050813;
       padding: 1px 4px;
       border-radius: 4px;
+    }
+
+    /* Rules reference styling */
+    #rulesRef {
+      margin-top: 10px;
+      padding: 8px 9px;
+      border-radius: 8px;
+      background: rgba(5, 9, 25, 0.85);
+      border: 1px solid rgba(72, 98, 189, 0.85);
+      font-size: 0.78rem;
+    }
+
+    #rulesRefTitle {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-soft);
+      margin-bottom: 4px;
+    }
+
+    .rulesBlock { margin-top: 4px; }
+    .rulesHeading { font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+
+    .rulesLines {
+      font-family: "Consolas", "Courier New", monospace;
+      line-height: 1.25;
+      color: var(--text-muted);
+      white-space: pre;
     }
 
     @media (max-width: 780px) {
@@ -375,6 +379,30 @@
         <div id="footer">
           Tip: think in <em>powers of two</em>. Carries and borrows work just like in denary, but every step left is ×2, not ×10.
         </div>
+
+        <!-- Rules reference block -->
+        <div id="rulesRef">
+          <div id="rulesRefTitle">Binary rules reference</div>
+
+          <div class="rulesBlock">
+            <div class="rulesHeading">Addition (base 2)</div>
+            <div class="rulesLines">
+0 + 0 = 0
+0 + 1 = 1
+1 + 0 = 1
+1 + 1 = 0  (carry 1)
+1 + 1 + 1 = 1  (carry 1)</div>
+          </div>
+
+          <div class="rulesBlock" style="margin-top:6px;">
+            <div class="rulesHeading">Subtraction (base 2)</div>
+            <div class="rulesLines">
+0 − 0 = 0
+1 − 0 = 1
+1 − 1 = 0
+0 − 1 = 1  (borrow 1 = 10₂ = 2₁₀)</div>
+          </div>
+        </div>
       </aside>
     </div>
   </div>
@@ -401,8 +429,8 @@
 
     let score = 0;
     let lives = 3;
-    let speed = 1;       // gentle difficulty multiplier
-    let spawnInterval = 9000; // ms between new problems (slow for paper working)
+    let speed = 1;
+    let spawnInterval = 9000;
     let lastSpawn = 0;
     let lastTime = 0;
     let paused = false;
@@ -415,13 +443,8 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function toBinary(n) {
-      return n.toString(2);
-    }
-
-    function padBinary(bin, width) {
-      return bin.padStart(width, '0');
-    }
+    function toBinary(n) { return n.toString(2); }
+    function padBinary(bin, width) { return bin.padStart(width, '0'); }
 
     function generateProblem() {
       const bits = randomInt(3, 5);
@@ -443,7 +466,7 @@
         result = a + b;
       } else {
         a = randomInt(Math.floor(maxVal / 2), maxVal);
-        b = randomInt(0, a); // keep result non-negative
+        b = randomInt(0, a);
         result = a - b;
       }
 
@@ -460,7 +483,6 @@
         answer: rBin,
         lane,
         y: -40,
-        // slower fall speed – classroom friendly
         speed: 10 + speed * 2
       });
     }
@@ -473,14 +495,13 @@
     function update(dt) {
       if (paused) return;
 
-      // spawn only if no active problem, giving time to solve on paper
       if (problems.length === 0 && performance.now() - lastSpawn > spawnInterval) {
         generateProblem();
         lastSpawn = performance.now();
       }
 
       for (let p of problems) {
-        p.y += (p.speed * dt);
+        p.y += p.speed * dt;
       }
 
       for (let i = problems.length - 1; i >= 0; i--) {
@@ -489,13 +510,10 @@
           lives--;
           livesSpan.textContent = lives;
           setMessage('Missed one! Life lost.', false);
-          if (lives <= 0) {
-            gameOver();
-          }
+          if (lives <= 0) gameOver();
         }
       }
 
-      // very gentle difficulty increase
       if (score > 10) speed = 1.1;
       if (score > 25) speed = 1.2;
       speedSpan.textContent = speed.toFixed(1) + 'x';
@@ -504,7 +522,6 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // lane lines
       ctx.strokeStyle = '#222b4a';
       ctx.lineWidth = 1;
       for (let i = 1; i < laneCount; i++) {
@@ -515,7 +532,6 @@
         ctx.stroke();
       }
 
-      // problem blocks
       for (let p of problems) {
         const x = p.lane * laneWidth;
         const y = p.y;
@@ -541,7 +557,6 @@
         ctx.fillText(p.expr, x + laneWidth / 2, y + h / 2);
       }
 
-      // deadline line
       ctx.strokeStyle = '#ff6b81';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -553,10 +568,8 @@
     function gameLoop(timestamp) {
       const dt = (timestamp - lastTime) / 1000;
       lastTime = timestamp;
-
       update(dt);
       draw();
-
       requestAnimationFrame(gameLoop);
     }
 
@@ -573,13 +586,11 @@
         return;
       }
 
-      // target = lowest block on screen
       let target = problems[0];
       for (let p of problems) {
         if (p.y > target.y) target = p;
       }
 
-      // normalise both to ignore leading zeros
       const cleanedInput  = input.replace(/^0+/, '') || '0';
       const cleanedAnswer = target.answer.replace(/^0+/, '') || '0';
 
@@ -614,11 +625,8 @@
       setMessage('');
     }
 
-    // events
-    answerInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        checkAnswer();
-      }
+    answerInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkAnswer();
     });
 
     pauseBtn.addEventListener('click', () => {
@@ -627,9 +635,7 @@
       setMessage(paused ? 'Paused.' : '', false);
     });
 
-    resetBtn.addEventListener('click', () => {
-      resetGame();
-    });
+    resetBtn.addEventListener('click', resetGame);
 
     function setMode(newMode) {
       mode = newMode;
@@ -648,10 +654,9 @@
     subBtn.addEventListener('click', () => setMode(MODES.SUB));
     mixedBtn.addEventListener('click', () => setMode(MODES.MIXED));
 
-    // start game
     resetGame();
     answerInput.focus();
-    requestAnimationFrame((t) => { lastTime = t; gameLoop(t); });
+    requestAnimationFrame(t => { lastTime = t; gameLoop(t); });
   </script>
 </body>
 </html>
