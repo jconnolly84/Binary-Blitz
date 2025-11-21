@@ -162,7 +162,7 @@
     }
 
     #answerPanel {
-      margin-top: 4px;
+      margin-top: -10px;  /* pull answer closer to danger line */
       width: 100%;
       display: flex;
       justify-content: center;
@@ -477,8 +477,9 @@
 }
 
     #answerCard {
-      max-width: 600px;
+      max-width: 520px;   /* align with game width */
       width: 100%;
+      margin: 0 auto;
       padding: 10px 14px;
       border-radius: 10px;
       background: linear-gradient(145deg, #0c1225, #101731);
